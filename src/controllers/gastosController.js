@@ -32,7 +32,10 @@ class GastosController {
     static async cadastrarGasto (req, res) {
         try {
             const novoGasto = await gasto.create(req.body);
-            res.status(201).json({message: "Cadastrado com sucesso!"});
+            res.status(201).json({
+                message: "Cadastrado com sucesso!",
+                gasto: novoGasto
+            });
     } catch (e) {
         res.status(500).json({message: `${e.message}`});
     }
