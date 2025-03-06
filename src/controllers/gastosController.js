@@ -1,4 +1,5 @@
 import { Gasto } from "../models/gastos.js";
+import { Usuario } from "../models/usuarios.js"
 import mongoose from "mongoose";
 
 class GastosController {
@@ -31,17 +32,29 @@ class GastosController {
     }
     static async cadastrarGasto (req, res) {
         try {
-            const {valor, categoria} = req.body;
+            const {valor, categoria, numeroTelefone} = req.body;
 
-            if (!valor || !categoria ) {
+            if (!valor || !categoria || !numeroTelefone) {
                 return res.status(400).send("Valor e categoria são obrigatórios!");
             }
 
-            const novoGasto = await Gasto.create(req.body);
+            const usuario = Usuario.findOne({numeroTelefone}); //Busca o usuario pelo numero de telefone
+
+            if (!usuario) {
+                return res.status(404).json({message: "Usuario não encontrado, faça o cadastro"});
+            }
+
+            const novoGasto = await Gasto.create({
+                valor,
+                categoria,
+                descricao,
+                usuarioId: usuario._id
+            });
 
             res.status(201).json({
                 message: "Cadastrado com sucesso!",
-                Gasto: novoGasto
+                Gasto: novoGasto,
+                usuarioId: usuario._id
             });
     } catch (e) {
         res.status(500).json({message: `${e.message}`});
