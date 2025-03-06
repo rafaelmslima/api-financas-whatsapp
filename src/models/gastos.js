@@ -2,10 +2,12 @@ import mongoose from "mongoose";
 
 const gastosSchema = new mongoose.Schema({
     id: {type: mongoose.Schema.Types.ObjectId},
-    tipo: {type: String, required: true},
     valor: {type: Number, required: true},
-}, {Timestamps: true});
+    categoria: {type: String, required: true},
+    descricao: {type: String},
+    data: {type: Date, default: Date.now}
+});
 
-const gasto = mongoose.model("gastos", gastosSchema);
+const Gasto = mongoose.model("gastos", gastosSchema);
 
-export { gasto, gastosSchema};
+export { Gasto, gastosSchema};
